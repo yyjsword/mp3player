@@ -1,0 +1,21 @@
+#written by yyj, 2008-9-17
+HEADPATH=../src/inc/
+LIBRPATH="../lib"
+OBJPATH = ../src/obj
+OBJPATH2 = ..\src\obj
+OBJ = $(OBJPATH)/getbits.obj $(OBJPATH)/imdct.obj $(OBJPATH)/layer3.obj
+
+$(LIBRPATH)/dec_frame.lib:$(OBJ)
+	lib /out:$(LIBRPATH)/dec_frame.lib $(OBJ) /machine:IX86
+$(OBJPATH)/getbits.obj:../src/dec_frame/getbits.cpp ../src/dec_frame/getbits.h ../src/dec_frame/frame.h
+	cl /O2 /G5 -I $(HEADPATH) -c ../src/dec_frame/getbits.cpp 
+	move getbits.obj $(OBJPATH)
+$(OBJPATH)/imdct.obj:../src/dec_frame/imdct.cpp ../src/dec_frame/decwin.h
+	cl /O2 /G5 -I $(HEADPATH) /c ../src/dec_frame/imdct.cpp
+	move imdct.obj $(OBJPATH)
+$(OBJPATH)/layer3.obj:../src/dec_frame/layer3.cpp ../src/mp.h ../src/dec_frame/huffman.h ../src/dec_frame/getbits.h ../src/dec_frame/frame.h
+	cl /O2 /G5 -I $(HEADPATH) -c ../src/dec_frame/layer3.cpp
+	move layer3.obj $(OBJPATH)
+
+clean:
+	del /q $(EXEPATH)\dec_frame.lib $(OBJPATH2)\getbits.obj $(OBJPATH2)\imdct.obj $(OBJPATH2)\layer3.obj
